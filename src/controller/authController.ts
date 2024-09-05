@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User, IUser } from "../models/userModel";
-import { setUser } from "../services/auth";
+import { setAccessToken, setRefreshToken } from "../services/authService";
 import bcrypt from "bcryptjs";
 
 async function handleUserSignUp(req: Request, res: Response) {
@@ -8,19 +8,32 @@ async function handleUserSignUp(req: Request, res: Response) {
   try {
     const foundUser = await User.findOne({ email: body.email });
     if (foundUser === null) {
-      await User.create(body);
+      const payload = { user: body.email };
+      const accessToken: string = setAccessToken(payload);
+      const refreshToken: string = setRefreshToken(payload);
+      await User.create({ ...body, refreshToken: refreshToken });
+
+      // http cookie is not accessible by js
+      res.cookie("uid", refreshToken, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
       res.status(201).json({
         message: `User ${body.name} signed up`,
+        accessToken,
       });
     } else {
       res.status(409);
       throw new Error(`Email ${body.email} already exist`);
     }
   } catch (error) {
-    if (error instanceof Error)
+    if (error instanceof Error) {
+      console.log(error.name);
       res.json({
         message: error.message,
       });
+    }
   }
 }
 
@@ -35,10 +48,20 @@ async function handleUserSignIn(req: Request, res: Response) {
       const isMatch = bcrypt.compareSync(body.password, query.password);
 
       if (isMatch) {
-        const token: string = setUser(body);
-        res.cookie("uid", token);
+        const payload = { user: query.email };
+        const accessToken: string = setAccessToken(payload);
+        const refreshToken: string = setRefreshToken(payload);
+
+        await User.findByIdAndUpdate(query._id, { refreshToken: refreshToken });
+
+        // http cookie is not accessible by js
+        res.cookie("uid", refreshToken, {
+          httpOnly: true,
+          maxAge: 24 * 60 * 60 * 1000,
+        });
         res.status(200).json({
-          message: `User ${body.name} signed in`,
+          name: query.name,
+          accessToken,
         });
       } else {
         res.status(409);
@@ -51,7 +74,7 @@ async function handleUserSignIn(req: Request, res: Response) {
       res.json({ error: error.message });
     } else {
       console.log("Unexpected error: ", error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.sendStatus(500);
     }
   }
 }
