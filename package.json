@@ -1,5 +1,5 @@
 {
-  "name": "url-shortner",
+  "name": "url-shortner-backend",
   "version": "1.0.0",
   "main": "app.ts",
   "scripts": {
@@ -23,7 +23,7 @@
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.3",
     "nanoid": "^5.0.7",
-    "short-id": "^0.1.0-1",
+    "short-id": "^0.0.0",
     "short-unique-id": "^5.2.0"
   },
   "devDependencies": {
