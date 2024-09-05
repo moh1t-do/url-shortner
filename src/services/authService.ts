@@ -6,7 +6,7 @@ const accesssecret: Secret = process.env.ACCESS_JWT_SECRET || "accesstest";
 const refreshsecret: Secret = process.env.REFRESH_JWT_SECRET || "refreshtest";
 
 function setAccessToken(payload: JwtPayload) {
-  const res = jwt.sign(payload, accesssecret, { expiresIn: "5m" });
+  const res = jwt.sign(payload, accesssecret, { expiresIn: "1d" });
   return res;
 }
 
