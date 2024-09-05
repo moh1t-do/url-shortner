@@ -5,13 +5,18 @@ interface IUser {
   name: string;
   email: string;
   password: string;
+  refreshToken: string;
 }
 
-const userSchema = new Schema<IUser>({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-});
+const userSchema = new Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    refreshToken: { type: String, required: true },
+  },
+  { timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
   const user = this;
