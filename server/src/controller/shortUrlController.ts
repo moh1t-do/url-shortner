@@ -25,7 +25,7 @@ async function handleGetShortUrl(req: Request, res: Response) {
 async function handlGetAllShortUrl(req: Request, res: Response) {
   const user = (req as CustomRequest).user;
   try {
-    const allUrls = await Url.find({ createdBy: user });
+    const allUrls = await Url.find({ createdBy: user }).sort({ createdAt: -1 });
     res.status(200).json({
       allUrls,
     });
