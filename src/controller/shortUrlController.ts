@@ -19,7 +19,7 @@ async function handleGetShortUrl(req: Request, res: Response) {
 
     if (query === null) throw new Error("Invalid short Id");
     else res.redirect(query.redirectUrl);
-  } catch (error) {}
+  } catch (error) { }
 }
 
 async function handlGetAllShortUrl(req: Request, res: Response) {
@@ -29,13 +29,28 @@ async function handlGetAllShortUrl(req: Request, res: Response) {
     res.status(200).json({
       allUrls,
     });
-  } catch (error) {}
+  } catch (error) { }
+}
+
+async function handleDeleteShortUrl(req: Request, res: Response) {
+  try {
+    const shortId: string = req.params.shortid;
+    if (shortId === undefined) throw new Error("url empty");
+    else {
+      await Url.findByIdAndDelete(shortId);
+
+      res.status(200).json({
+        message: "Short url deleted",
+      });
+    }
+  } catch (error) {
+    if (error instanceof Error) res.status(500).json(error.message);
+  }
 }
 
 async function handleGenerateNewShortUrl(req: Request, res: Response) {
   try {
     const body: string | undefined = req.body.url;
-
     const user = (req as CustomRequest).user;
     if (body === undefined) throw new Error("url empty");
     else {
@@ -69,12 +84,13 @@ async function handleGetAnlaytics(req: Request, res: Response) {
         totalClicks: query.vistHistory.length,
         analytics: query.vistHistory,
       });
-  } catch (error) {}
+  } catch (error) { }
 }
 
 export {
   handleGetShortUrl,
   handlGetAllShortUrl,
   handleGenerateNewShortUrl,
+  handleDeleteShortUrl,
   handleGetAnlaytics,
 };

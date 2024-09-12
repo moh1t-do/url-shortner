@@ -20,7 +20,7 @@ async function handleUserSignUp(req: Request, res: Response) {
       });
 
       res.status(201).json({
-        message: `User ${body.name} signed up`,
+        name: body.name,
         accessToken,
       });
     } else {

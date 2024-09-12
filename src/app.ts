@@ -8,6 +8,7 @@ import { router as heyRouter } from "./routes/heyRoute";
 import { router as authRouter } from "./routes/authRoute";
 import { router as shortUrlRouter } from "./routes/shortUrlRoute";
 import { router as refreshRouter } from "./routes/refreshRoute";
+import { router as redirectRouter } from "./routes/redirectRoute";
 
 // functions
 import { connectToDb } from "./connect";
@@ -43,6 +44,7 @@ app.use("/api/v1/hey", verifyJWT, heyRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/refresh", refreshRouter);
 app.use("/api/v1/short", verifyJWT, shortUrlRouter);
+app.use("/api/v1/redirect", redirectRouter);
 
 // app.listen(port);
 app.listen(port, () => {
