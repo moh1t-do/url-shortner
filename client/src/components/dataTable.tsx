@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "./ui/button";
-import axiosInstance from "@/lib/axiosInstance";
+import axiosInstance, { SERVER_URL } from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 
@@ -75,7 +75,7 @@ export const DataTable = (props: IDataTable) => {
             {data.map((item) => (
               <TableRow key={item._id}>
                 <TableCell className="font-medium">
-                  <Link legacyBehavior href={`/redirect/${item.shortId}`} passHref>
+                  <Link legacyBehavior href={`${SERVER_URL}/redirect/${item.shortId}`} passHref>
                     <a target="_blank" rel="noopener noreferrer">
                       {item.shortId}
                     </a>
