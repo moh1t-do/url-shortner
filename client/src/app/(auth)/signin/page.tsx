@@ -70,7 +70,7 @@ export default function Signin() {
         </form>
         <CardFooter>
           <div className="flex flex-col w-full gap-1">
-            <p className="text-sm">Don't have an account?</p>
+            <p className="text-sm">Don&apost have an account?</p>
             <Button variant="secondary" onClick={() => {
               router.push('/signup')
             }}>

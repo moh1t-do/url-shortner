@@ -37,24 +37,23 @@ const Home = () => {
       setReload(true);
   }
 
-  const getShortUrl = async () => {
-    try {
-      const result = await axiosInstance.get('/short', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-      setData(result.data.allUrls);
-      setReload(false);
-    } catch (error) {
+  useEffect(() => {
+    const getShortUrl = async () => {
+      try {
+        const result = await axiosInstance.get<any>('/short', {
+          headers: {
+            Authorization: `Bearer ${accessToken}`
+          }
+        });
+        setData(result.data.allUrls);
+        setReload(false);
+      } catch (error) {
+
+      }
 
     }
-
-  }
-
-  useEffect(() => {
     getShortUrl();
-  }, [reload, user])
+  }, [reload, user, accessToken])
 
   return (
     <>

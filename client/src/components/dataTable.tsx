@@ -36,7 +36,7 @@ export const DataTable = (props: IDataTable) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axiosInstance.delete(`https://url-shortner-510z.onrender.com/api/v1/${id}`, {
+      await axiosInstance.delete(`/short/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -75,7 +75,7 @@ export const DataTable = (props: IDataTable) => {
             {data.map((item) => (
               <TableRow key={item._id}>
                 <TableCell className="font-medium">
-                  <Link legacyBehavior href={`https://url-shortner-510z.onrender.com/api/v1/redirect/${item.shortId}`} passHref>
+                  <Link legacyBehavior href={`/redirect/${item.shortId}`} passHref>
                     <a target="_blank" rel="noopener noreferrer">
                       {item.shortId}
                     </a>

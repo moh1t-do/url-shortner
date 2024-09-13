@@ -12,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation';
-import axios from "axios"
+import axiosInstance from "@/lib/axiosInstance"
 import { useAuth } from "@/context/authContext"
 
 export default function Signin() {
@@ -21,6 +21,11 @@ export default function Signin() {
     const [name, setName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [password, setPassword] = useState<string | null>(null)
+
+    interface ISignUp {
+        name: string
+        accessToken: string
+    }
 
     const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,8 +37,8 @@ export default function Signin() {
         }
 
         try {
-            const result = await axios.post('https://url-shortner-510z.onrender.com/api/v1/auth/signup', payload);
-            login(result.data.name, result.data.accessToken);
+            const { data } = await axiosInstance.post<ISignUp>('/auth/signup', payload);
+            login(data.name, data.accessToken);
             router.push('/');
         } catch (error) {
 
