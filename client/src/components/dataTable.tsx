@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "./ui/button";
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
 import Link from "next/link";
 
@@ -36,7 +36,7 @@ export const DataTable = (props: IDataTable) => {
 
   const handleDelete = async (id: string) => {
     try {
-      await axios.delete(`http://localhost:8000/api/v1/short/${id}`, {
+      await axiosInstance.delete(`https://url-shortner-510z.onrender.com/api/v1/${id}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -75,7 +75,7 @@ export const DataTable = (props: IDataTable) => {
             {data.map((item) => (
               <TableRow key={item._id}>
                 <TableCell className="font-medium">
-                  <Link legacyBehavior href={`http://localhost:8000/api/v1/redirect/${item.shortId}`} passHref>
+                  <Link legacyBehavior href={`https://url-shortner-510z.onrender.com/api/v1/redirect/${item.shortId}`} passHref>
                     <a target="_blank" rel="noopener noreferrer">
                       {item.shortId}
                     </a>
