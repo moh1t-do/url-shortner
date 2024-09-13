@@ -32,9 +32,7 @@ export default function Signin() {
         }
 
         try {
-            const result = await axios.post('http://localhost:8000/api/v1/auth/signup', payload, {
-                withCredentials: true
-            });
+            const result = await axios.post('https://url-shortner-510z.onrender.com/api/v1/auth/signup', payload);
             login(result.data.name, result.data.accessToken);
             router.push('/');
         } catch (error) {

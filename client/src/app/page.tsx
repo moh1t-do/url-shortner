@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
 import { DataTable, Idata } from "@/components/dataTable";
-import axios from "axios";
+import axiosInstance from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
 
@@ -20,7 +20,7 @@ const Home = () => {
       router.push('/signin');
     const payload = { url: longUrl };
     try {
-      await axios.post('http://localhost:8000/api/v1/short', payload, {
+      await axiosInstance.post('/short', payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
@@ -39,7 +39,7 @@ const Home = () => {
 
   const getShortUrl = async () => {
     try {
-      const result = await axios.get('http://localhost:8000/api/v1/short', {
+      const result = await axiosInstance.get('/short', {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }

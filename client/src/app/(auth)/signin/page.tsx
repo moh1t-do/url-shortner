@@ -12,8 +12,13 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
-import axios from 'axios';
 import { useAuth } from "@/context/authContext"
+import axiosInstance from "@/lib/axiosInstance"
+
+interface Isignin {
+  name: string
+  accessToken: string
+}
 
 export default function Signin() {
   const router = useRouter();
@@ -28,8 +33,8 @@ export default function Signin() {
       password: password
     }
     try {
-      const result = await axios.post('http://localhost:8000/api/v1/auth/signin', payload);
-      login(result.data.name, result.data.accessToken);
+      const { data } = await axiosInstance.post<Isignin>('/auth/signin', payload);
+      login(data.name, data.accessToken);
       router.push('/');
     } catch (error: unknown) {
       if (error instanceof Error)
