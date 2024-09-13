@@ -47,7 +47,7 @@ export default function Signin() {
 
     return (
         <div className="mx-auto">
-            <Card className="w-[400px]">
+            <Card className="sm:w-[400px] w-[300px]">
                 <form onSubmit={handleSignUp}>
                     <CardHeader>
                         <CardTitle>Sign Up</CardTitle>
