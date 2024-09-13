@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
-import jwt, { decode, JwtPayload, Secret } from "jsonwebtoken";
+import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 dotenv.config();
-const tokenSecret: Secret = process.env.JWT_SECRET || "test";
+const tokenSecret: Secret = process.env.ACCESS_SECRET || "test";
 
 export interface CustomRequest extends Request {
   user: string | JwtPayload | undefined;

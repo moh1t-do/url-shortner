@@ -5,7 +5,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import { setAccessToken } from "../services/authService";
 
 dotenv.config();
-const refreshsecret: Secret = process.env.REFRESH_JWT_SECRET || "test";
+const refreshsecret: Secret = process.env.REFRESH_SECRET || '';
 
 async function handlerefreshToken(req: Request, res: Response) {
   const cookies = req.cookies;
