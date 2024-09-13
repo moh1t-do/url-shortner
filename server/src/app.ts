@@ -18,8 +18,9 @@ import { verifyJWT } from "./middleware/authMiddleware";
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.APP_PORT;
+const port = process.env.SERVER_PORT;
 const dbport = process.env.DB_PORT;
+const clientUrl = process.env.CLIENT_URL
 
 // database connection
 connectToDb(dbport);
@@ -30,8 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:3000",
-    credentials: true, // Allow credentials
+    origin: `${clientUrl}`,
   })
 );
 

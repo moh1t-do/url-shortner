@@ -3,7 +3,7 @@ import jwt, { decode, JwtPayload, Secret } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 dotenv.config();
-const accesssecret: Secret = process.env.ACCESS_JWT_SECRET || "test";
+const tokenSecret: Secret = process.env.JWT_SECRET || "test";
 
 export interface CustomRequest extends Request {
   user: string | JwtPayload | undefined;
@@ -18,7 +18,7 @@ async function verifyJWT(req: Request, res: Response, next: NextFunction) {
     });
   } else {
     const token = userUid.split("Bearer ")[1];
-    jwt.verify(token, accesssecret, (err, decoded) => {
+    jwt.verify(token, tokenSecret, (err, decoded) => {
       if (err)
         if (err instanceof Error)
           return res.status(403).json({
