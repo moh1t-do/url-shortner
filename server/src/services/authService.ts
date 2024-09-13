@@ -2,16 +2,17 @@ import dotenv from "dotenv";
 import jwt, { JwtPayload, Secret } from "jsonwebtoken";
 
 dotenv.config();
-const accesssecret: Secret = process.env.ACCESS_JWT_SECRET || "accesstest";
-const refreshsecret: Secret = process.env.REFRESH_JWT_SECRET || "refreshtest";
+const tokenSecret: Secret | undefined = process.env.ACCESS_SECRET;
+const refreshsecret: Secret | undefined = process.env.REFRESH_SECRET;
 
 function setAccessToken(payload: JwtPayload) {
-  const res = jwt.sign(payload, accesssecret, { expiresIn: "1d" });
-  return res;
+  if (tokenSecret)
+    return jwt.sign(payload, tokenSecret, { expiresIn: "1d" });
 }
 
 function setRefreshToken(payload: JwtPayload) {
-  return jwt.sign(payload, refreshsecret, { expiresIn: "1d" });
+  if (refreshsecret)
+    return jwt.sign(payload, refreshsecret, { expiresIn: "1d" });
 }
 
 export { setAccessToken, setRefreshToken };

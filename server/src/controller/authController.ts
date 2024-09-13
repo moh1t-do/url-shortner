@@ -9,8 +9,8 @@ async function handleUserSignUp(req: Request, res: Response) {
     const foundUser = await User.findOne({ email: body.email });
     if (foundUser === null) {
       const payload = { user: body.email };
-      const accessToken: string = setAccessToken(payload);
-      const refreshToken: string = setRefreshToken(payload);
+      const accessToken: string | undefined = setAccessToken(payload);
+      const refreshToken: string | undefined = setRefreshToken(payload);
       await User.create({ ...body, refreshToken: refreshToken });
 
       // http cookie is not accessible by js
@@ -49,8 +49,8 @@ async function handleUserSignIn(req: Request, res: Response) {
 
       if (isMatch) {
         const payload = { user: query.email };
-        const accessToken: string = setAccessToken(payload);
-        const refreshToken: string = setRefreshToken(payload);
+        const accessToken: string | undefined = setAccessToken(payload);
+        const refreshToken: string | undefined = setRefreshToken(payload);
 
         await User.findByIdAndUpdate(query._id, { refreshToken: refreshToken });
 
