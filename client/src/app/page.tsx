@@ -6,9 +6,11 @@ import { DataTable, Idata } from "@/components/dataTable";
 import axiosInstance from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
+import { title } from "process";
 
 
 const Home = () => {
+  const [urlTitle, setUrlTitle] = useState<string>("");
   const [longUrl, setLongUrl] = useState<string>("");
   const [reload, setReload] = useState<boolean>(false);
   const [data, setData] = useState<Idata[]>([]);
@@ -18,13 +20,14 @@ const Home = () => {
     e.preventDefault();
     if (user == null)
       router.push('/signin');
-    const payload = { url: longUrl };
+    const payload = { title: urlTitle, url: longUrl };
     try {
       await axiosInstance.post('/short', payload, {
         headers: {
           Authorization: `Bearer ${accessToken}`
         }
       });
+      setUrlTitle("");
       setLongUrl("");
       setReload(true);
     } catch (error) {
@@ -62,12 +65,19 @@ const Home = () => {
           The only URL Shortener <br /> you&rsquo;ll ever need! 👇
         </h2>
         <form
-          className="sm:h-14 flex flex-col sm:flex-row w-full md:w-2/4 gap-2"
+          className="sm:h-14 flex flex-col sm:flex-row w-full md:w-3/4 gap-2"
           onSubmit={handleFormSubmit}
         >
           <Input
+            type="text"
+            placeholder="Enter your URL title"
+            value={urlTitle}
+            onChange={(e) => setUrlTitle(e.target.value)}
+            className="h-full flex-1 py-4 px-4"
+          />
+          <Input
             type="url"
-            placeholder="Enter your loooong URL"
+            placeholder="Enter your long URL"
             value={longUrl}
             onChange={(e) => setLongUrl(e.target.value)}
             className="h-full flex-1 py-4 px-4"

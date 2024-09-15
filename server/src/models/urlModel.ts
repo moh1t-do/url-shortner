@@ -1,17 +1,19 @@
 import mongoose, { Schema, model, Model } from "mongoose";
 
 interface IUrl {
+  urlTitle: string;
   shortId: string;
   redirectUrl: string;
-  vistHistory: number[];
+  visitHistory: number[];
   createdBy: string;
 }
 
 const urlSchema = new Schema<IUrl>(
   {
+    urlTitle: { type: String, required: true },
     shortId: { type: String, required: true, unique: true },
     redirectUrl: { type: String, required: true },
-    vistHistory: [{ timestamp: { type: Number } }],
+    visitHistory: [{ timestamp: { type: Number } }],
     createdBy: {
       type: String,
       ref: "users",

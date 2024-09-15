@@ -4,7 +4,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 // routers
-import { router as heyRouter } from "./routes/heyRoute";
 import { router as authRouter } from "./routes/authRoute";
 import { router as shortUrlRouter } from "./routes/shortUrlRoute";
 import { router as refreshRouter } from "./routes/refreshRoute";
@@ -19,11 +18,11 @@ dotenv.config();
 
 const app: Application = express();
 const port = process.env.SERVER_PORT;
-const dbport = process.env.DB_PORT;
+const dbUrl = process.env.DB_URL;
 const clientUrl = process.env.CLIENT_URL
 
 // database connection
-connectToDb(dbport);
+connectToDb(dbUrl);
 
 // middleware
 app.use(express.json());
@@ -40,7 +39,6 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 // all routes
-app.use("/api/v1/hey", verifyJWT, heyRouter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/refresh", refreshRouter);
 app.use("/api/v1/short", verifyJWT, shortUrlRouter);

@@ -3,25 +3,6 @@ import { Url } from "../models/urlModel";
 import ShortUniqueId = require("short-unique-id");
 import { CustomRequest } from "../middleware/authMiddleware";
 
-async function handleGetShortUrl(req: Request, res: Response) {
-  try {
-    const shortId: string = req.params.shortid;
-    const query = await Url.findOneAndUpdate(
-      { shortId: shortId },
-      {
-        $push: {
-          vistHistory: {
-            timestamp: Date.now(),
-          },
-        },
-      }
-    );
-
-    if (query === null) throw new Error("Invalid short Id");
-    else res.redirect(query.redirectUrl);
-  } catch (error) { }
-}
-
 async function handlGetAllShortUrl(req: Request, res: Response) {
   const user = (req as CustomRequest).user;
   try {
@@ -48,17 +29,18 @@ async function handleDeleteShortUrl(req: Request, res: Response) {
   }
 }
 
-async function handleGenerateNewShortUrl(req: Request, res: Response) {
+async function handleCreateShortUrl(req: Request, res: Response) {
   try {
-    const body: string | undefined = req.body.url;
+    const body: any = req.body;
     const user = (req as CustomRequest).user;
     if (body === undefined) throw new Error("url empty");
     else {
       const shortId = new ShortUniqueId({ length: 10 });
       const rshortId = shortId.rnd();
       await Url.create({
+        urlTitle: body.title,
         shortId: rshortId,
-        redirectUrl: body,
+        redirectUrl: body.url,
         vistHistory: [],
         createdBy: user,
       });
@@ -81,16 +63,15 @@ async function handleGetAnlaytics(req: Request, res: Response) {
       throw new Error("Invalid short Id");
     else
       res.status(200).json({
-        totalClicks: query.vistHistory.length,
-        analytics: query.vistHistory,
+        totalClicks: query.visitHistory.length,
+        analytics: query.visitHistory,
       });
   } catch (error) { }
 }
 
 export {
-  handleGetShortUrl,
   handlGetAllShortUrl,
-  handleGenerateNewShortUrl,
+  handleCreateShortUrl,
   handleDeleteShortUrl,
   handleGetAnlaytics,
 };
