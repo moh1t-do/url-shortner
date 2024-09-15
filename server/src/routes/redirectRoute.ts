@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { handleGetShortUrl } from '../controller/shortUrlController';
-export const router = Router();
+import { handleRedirectUrl } from '../controller/redirectUrlController';
 
-router.route("/:shortid").get(handleGetShortUrl);
+export const router = Router();
+router.route("/:shortid").get(handleRedirectUrl);
