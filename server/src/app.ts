@@ -18,11 +18,11 @@ dotenv.config();
 
 const app: Application = express();
 const port = process.env.SERVER_PORT;
-const dbport = process.env.DB_PORT;
+const dbUrl = process.env.DB_URL;
 const clientUrl = process.env.CLIENT_URL
 
 // database connection
-connectToDb(dbport);
+connectToDb(dbUrl);
 
 // middleware
 app.use(express.json());
