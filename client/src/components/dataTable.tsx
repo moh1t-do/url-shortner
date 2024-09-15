@@ -11,15 +11,20 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "./ui/button";
+import { useEffect, useState } from "react";
 import axiosInstance, { SERVER_URL } from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import Link from "next/link";
+import { Copy, Trash } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 export interface Idata {
   _id: string,
+  urlTitle: string,
   shortId: string,
   redirectUrl: string,
-  visitHistory: Date[],
+  visitHistory: number[],
   createdBy: string,
   createdAt: Date,
   updatedAt: Date
@@ -31,6 +36,8 @@ interface IDataTable {
 };
 
 export const DataTable = (props: IDataTable) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [filteredUrls, setFilteredUrls] = useState<null | Idata[]>(null);
   const { accessToken } = useAuth();
   const { data, handleReload } = props;
 
@@ -47,6 +54,23 @@ export const DataTable = (props: IDataTable) => {
     }
   }
 
+  useEffect(() => {
+    setSearchQuery('');
+  }, [data])
+
+  useEffect(() => {
+    const filteredUrls = () => data?.filter((url) =>
+      url.urlTitle.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const filterResult = filteredUrls();
+    if (filterResult.length > 0)
+      setFilteredUrls(filterResult)
+    else
+      setFilteredUrls(null);
+
+  }, [searchQuery])
+
   return (
     <div className="flex flex-col gap-8">
       <div className="grid gap-4">
@@ -62,18 +86,25 @@ export const DataTable = (props: IDataTable) => {
       <div className="flex justify-between">
         <h1 className="text-4xl font-extrabold">My Links</h1>
       </div>
+      <Input
+        type="text"
+        placeholder="Filter Links..."
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)} />
       <div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Short Url</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Short Url</TableHead>
               <TableHead>Created At</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.map((item) => (
+            {(filteredUrls || data).map((item) => (
               <TableRow key={item._id}>
+                <TableCell>{item.urlTitle}</TableCell>
                 <TableCell className="font-medium">
                   <Link legacyBehavior href={`${SERVER_URL}/redirect/${item.shortId}`} passHref>
                     <a target="_blank" rel="noopener noreferrer">
@@ -81,17 +112,22 @@ export const DataTable = (props: IDataTable) => {
                     </a>
                   </Link>
                 </TableCell>
-                <TableCell>{new Date(item.createdAt).toString()}</TableCell>
+                <TableCell>{(new Date(item.createdAt)).toDateString()}</TableCell>
                 <TableCell>
-                  <Button onClick={() => handleDelete(item._id)}>
-                    Delete
-                  </Button>
+                  <div className="flex gap-2 items-center flex-col md:flex-row">
+                    <Button onClick={() => handleDelete(item._id)}>
+                      <Trash />
+                    </Button>
+                    <CopyToClipboard text={`${SERVER_URL}/redirect/${item.shortId}`}>
+                      <Button><Copy /></Button>
+                    </CopyToClipboard>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
-    </div >
+    </div>
   );
 };
