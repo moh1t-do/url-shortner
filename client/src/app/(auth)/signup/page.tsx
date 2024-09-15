@@ -79,7 +79,7 @@ export default function Signin() {
                     <div className="flex flex-col w-full gap-1">
                         <p className="text-sm">Already have an account?</p>
                         <Button variant="secondary" onClick={() => {
-                            router.push('/dashboard/signin')
+                            router.push('/signin')
                         }}>
                             Sign In
                         </Button>
