@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useEffect, useState } from "react";
-import { DataTable, Idata } from "@/components/dataTable";
+import { DataTable } from "@/components/dataTable";
+import { IUrldata } from "@/interface/url";
 import axiosInstance from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,7 @@ const Home = () => {
   const [urlTitle, setUrlTitle] = useState<string>("");
   const [longUrl, setLongUrl] = useState<string>("");
   const [reload, setReload] = useState<boolean>(false);
-  const [data, setData] = useState<Idata[]>([]);
+  const [data, setData] = useState<IUrldata[]>([]);
   const router = useRouter();
   const { user, accessToken } = useAuth();
   const handleFormSubmit = async (e: React.FormEvent) => {
