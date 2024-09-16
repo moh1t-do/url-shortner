@@ -52,7 +52,8 @@ export const DataTable = (props: IDataTable) => {
           <TableHead>Title</TableHead>
           <TableHead>Short Url</TableHead>
           <TableHead>Created At</TableHead>
-          <TableHead>Action</TableHead>
+          <TableHead>Clicks</TableHead>
+          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -67,6 +68,7 @@ export const DataTable = (props: IDataTable) => {
               </Link>
             </TableCell>
             <TableCell>{(new Date(item.createdAt)).toLocaleDateString('en-GB')}</TableCell>
+            <TableCell>{item.visitHistory.length}</TableCell>
             <TableCell>
               <div className="flex gap-2 items-center justify-start">
                 <Button onClick={() => handleDelete(item._id)}>
