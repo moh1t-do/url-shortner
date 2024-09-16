@@ -6,7 +6,6 @@ import { DataTable, Idata } from "@/components/dataTable";
 import axiosInstance from "@/lib/axiosInstance";
 import { useAuth } from "@/context/authContext";
 import { useRouter } from "next/navigation";
-import { title } from "process";
 
 
 const Home = () => {
@@ -72,14 +71,14 @@ const Home = () => {
             type="text"
             placeholder="Enter your URL title"
             value={urlTitle}
-            onChange={(e) => setUrlTitle(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setUrlTitle(e.target.value)}
             className="h-full flex-1 py-4 px-4"
           />
           <Input
             type="url"
             placeholder="Enter your long URL"
             value={longUrl}
-            onChange={(e) => setLongUrl(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLongUrl(e.target.value)}
             className="h-full flex-1 py-4 px-4"
           />
           <Button type="submit" className="h-full" variant="destructive">
